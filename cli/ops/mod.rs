@@ -14,6 +14,7 @@ pub mod fetch;
 pub mod fs;
 pub mod fs_events;
 pub mod io;
+pub mod module;
 pub mod net;
 #[cfg(unix)]
 mod net_unix;
