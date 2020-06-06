@@ -554,6 +554,8 @@ impl EsIsolate {
     specifier: &ModuleSpecifier,
     code: Option<String>,
   ) -> Result<ModuleId, ErrBox> {
+    println!("load_module {:?}", specifier.to_string());
+
     self.shared_init();
     let loader = {
       let state_rc = Self::state(self);

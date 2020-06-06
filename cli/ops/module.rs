@@ -31,12 +31,12 @@ fn op_clear_cache_import(
   let args: ClearCacheImportArgs = serde_json::from_value(args)?;
   let specifier = args.specifier.clone();
 
-  println!("Hello module {:?} {:?}", specifier, referrer);
+  // println!("Hello module {:?} {:?}", specifier, referrer);
 
   let module_specifier =
     ModuleSpecifier::resolve_import(&specifier, &referrer)?;
 
-  println!("Specifier {:?}", module_specifier.to_string());
+  // println!("Specifier {:?}", module_specifier.to_string());
 
   let out = state.global_state
                  .file_fetcher
@@ -50,6 +50,8 @@ fn op_clear_cache_import(
     println!("Cache path {:?}", out.unwrap().filename);
 
   }
+
+  state.global_state.file_fetcher.remove_cached_source_file(&module_specifier);
 
   // assert_eq!(zero_copy.len(), 1);
 

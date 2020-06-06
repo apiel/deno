@@ -57,6 +57,11 @@ impl SourceFileCache {
       None => None,
     }
   }
+
+  pub fn remove(&self, key: String) {
+    let mut c = self.0.lock().unwrap();
+    c.remove(&key);
+  }
 }
 
 const SUPPORTED_URL_SCHEMES: [&str; 3] = ["http", "https", "file"];
@@ -107,6 +112,13 @@ impl SourceFileFetcher {
     Ok(())
   }
 
+  pub fn remove_cached_source_file(
+    &self,
+    specifier: &ModuleSpecifier,
+  ) {
+    self.source_file_cache.remove(specifier.to_string());
+  }
+
   /// Required for TS compiler and source maps.
   pub fn fetch_cached_source_file(
     &self,
@@ -119,6 +131,7 @@ impl SourceFileFetcher {
       return maybe_source_file;
     }
 
+    println!("fetch_cached_source_file > No mem Cache");
     // If file is not in memory cache check if it can be found
     // in local cache - which effectively means trying to fetch
     // using "--cached-only" flag.
