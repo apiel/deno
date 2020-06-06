@@ -1003,7 +1003,7 @@ declare namespace Deno {
    * Requires `allow-write` permission. */
   export function chmodSync(path: string, mode: number): void;
 
-  export function clearCacheImport(path: string): void;
+  export function clearCacheImport(specifier: string): void;
 
   /** Changes the permission of a specific file/directory of specified path.
    * Ignores the process's umask.

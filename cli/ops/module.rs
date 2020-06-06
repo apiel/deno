@@ -4,7 +4,8 @@ use crate::op_error::OpError;
 use crate::state::State;
 use deno_core::CoreIsolate;
 use deno_core::ZeroCopyBuf;
-use std::path::{Path};
+use deno_core::ModuleSpecifier;
+use crate::permissions::Permissions;
 
 pub fn init(i: &mut CoreIsolate, s: &State) {
   i.register_op(
@@ -16,7 +17,7 @@ pub fn init(i: &mut CoreIsolate, s: &State) {
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct ClearCacheImportArgs {
-  path: String,
+  specifier: String,
 }
 
 fn op_clear_cache_import(
@@ -28,9 +29,28 @@ fn op_clear_cache_import(
   let referrer = state.main_module.to_string();
 
   let args: ClearCacheImportArgs = serde_json::from_value(args)?;
-  let path = Path::new(&args.path).to_path_buf();
+  let specifier = args.specifier.clone();
 
-  println!("Hello module {:?} {:?}", path, referrer);
+  println!("Hello module {:?} {:?}", specifier, referrer);
+
+  let module_specifier =
+    ModuleSpecifier::resolve_import(&specifier, &referrer)?;
+
+  println!("Specifier {:?}", module_specifier.to_string());
+
+  let out = state.global_state
+                 .file_fetcher
+                 .fetch_cached_source_file(&module_specifier, Permissions::allow_all());
+                //  .expect("Cached source file doesn't exist");
+
+  if out.is_none() {
+    println!("No Cache");
+
+  } else {
+    println!("Cache path {:?}", out.unwrap().filename);
+
+  }
+
   // assert_eq!(zero_copy.len(), 1);
 
   // if let Some(ref mut seeded_rng) = state.borrow_mut().seeded_rng {
