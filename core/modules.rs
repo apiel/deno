@@ -327,7 +327,12 @@ impl ModuleNameMap {
     }
   }
 
-  /// Insert a name assocated module id.
+  /// Remove a name associated module id.
+  pub fn remove(&mut self, name: &str) {
+    self.inner.remove(name);
+  }
+
+  /// Insert a name associated module id.
   pub fn insert(&mut self, name: String, id: ModuleId) {
     self.inner.insert(name, SymbolicModule::Mod(id));
   }
@@ -359,6 +364,17 @@ impl Modules {
     Self {
       info: HashMap::new(),
       by_name: ModuleNameMap::new(),
+    }
+  }
+
+  pub fn unregister(&mut self, name: &str) {
+    let id = self.by_name.get(name);
+    match id {
+      Some(i) => {
+        self.info.remove(&i);
+        self.by_name.remove(name);
+      },
+      None => {},
     }
   }
 

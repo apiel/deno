@@ -36,6 +36,11 @@ fn op_clear_cache_import(
   let module_specifier =
     ModuleSpecifier::resolve_import(&specifier, &referrer)?;
 
+  state.global_state.file_fetcher.remove_cached_source_file(&module_specifier);
+
+  // state.global_state.modules.unregister("abc");
+
+
   // println!("Specifier {:?}", module_specifier.to_string());
 
   let out = state.global_state
@@ -47,11 +52,13 @@ fn op_clear_cache_import(
     println!("No Cache");
 
   } else {
-    println!("Cache path {:?}", out.unwrap().filename);
+    let yo = out.unwrap();
+    println!("Cache path {:?} {:?}", yo.filename, String::from_utf8(yo.source_code).unwrap());
 
   }
 
-  state.global_state.file_fetcher.remove_cached_source_file(&module_specifier);
+
+  // println!("done");
 
   // assert_eq!(zero_copy.len(), 1);
 
