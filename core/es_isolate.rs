@@ -500,6 +500,7 @@ impl EsIsolate {
       state.modules.get_id(&module_url_found)
     };
 
+    println!("it's here that magic happen {:?}", module_url_found);
     let module_id = match maybe_mod_id {
       Some(id) => {
         // Module has already been registered.
@@ -581,6 +582,11 @@ impl EsIsolate {
     let state_rc = Self::state(self);
     std::mem::take(&mut state_rc.borrow_mut().modules);
     CoreIsolate::snapshot(self)
+  }
+
+  pub fn remove_module(&mut self) {
+    // let state_rc = Self::state(self);
+    // state_rc.borrow_mut().modules
   }
 
   pub fn state(isolate: &v8::Isolate) -> Rc<RefCell<EsIsolateState>> {

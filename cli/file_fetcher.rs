@@ -131,7 +131,6 @@ impl SourceFileFetcher {
       return maybe_source_file;
     }
 
-    println!("fetch_cached_source_file > No mem Cache");
     // If file is not in memory cache check if it can be found
     // in local cache - which effectively means trying to fetch
     // using "--cached-only" flag.

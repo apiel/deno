@@ -8,6 +8,7 @@ use deno_core::ModuleSpecifier;
 use crate::permissions::Permissions;
 
 pub fn init(i: &mut CoreIsolate, s: &State) {
+  // i.remove_module();
   i.register_op(
     "op_clear_cache_import",
     s.stateful_json_op(op_clear_cache_import),
@@ -31,7 +32,6 @@ fn op_clear_cache_import(
   let args: ClearCacheImportArgs = serde_json::from_value(args)?;
   let specifier = args.specifier.clone();
 
-  // println!("Hello module {:?} {:?}", specifier, referrer);
 
   let module_specifier =
     ModuleSpecifier::resolve_import(&specifier, &referrer)?;
@@ -40,33 +40,18 @@ fn op_clear_cache_import(
 
   // state.global_state.modules.unregister("abc");
 
+  // let out = state.global_state
+  //                .file_fetcher
+  //                .fetch_cached_source_file(&module_specifier, Permissions::allow_all());
+  //               //  .expect("Cached source file doesn't exist");
 
-  // println!("Specifier {:?}", module_specifier.to_string());
+  // if out.is_none() {
+  //   println!("No Cache");
 
-  let out = state.global_state
-                 .file_fetcher
-                 .fetch_cached_source_file(&module_specifier, Permissions::allow_all());
-                //  .expect("Cached source file doesn't exist");
-
-  if out.is_none() {
-    println!("No Cache");
-
-  } else {
-    let yo = out.unwrap();
-    println!("Cache path {:?} {:?}", yo.filename, String::from_utf8(yo.source_code).unwrap());
-
-  }
-
-
-  // println!("done");
-
-  // assert_eq!(zero_copy.len(), 1);
-
-  // if let Some(ref mut seeded_rng) = state.borrow_mut().seeded_rng {
-  //   seeded_rng.fill(&mut *zero_copy[0]);
   // } else {
-  //   let mut rng = thread_rng();
-  //   rng.fill(&mut *zero_copy[0]);
+  //   let yo = out.unwrap();
+  //   println!("Cache path {:?} {:?}", yo.filename, String::from_utf8(yo.source_code).unwrap());
+
   // }
 
   Ok(JsonOp::Sync(json!({})))
