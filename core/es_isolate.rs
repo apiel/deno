@@ -471,6 +471,22 @@ impl EsIsolate {
       module_url_found,
     } = info;
 
+
+    // let core_state_rc = CoreIsolate::state(self);
+    // let mut hs = v8::HandleScope::new(&mut self.0);
+    // let scope = hs.enter();
+    // let file_fetcher = {
+    //   let core_state = core_state_rc.borrow();
+    //   core_state.file_fetcher
+    // };
+
+    // SourceFileFetcher
+
+
+
+
+
+
     let is_main =
       load.state == LoadState::LoadingRoot && !load.is_dynamic_import();
     let referrer_specifier =

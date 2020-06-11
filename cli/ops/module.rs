@@ -2,16 +2,23 @@
 use super::dispatch_json::{JsonOp, Value, Deserialize};
 use crate::op_error::OpError;
 use crate::state::State;
-use deno_core::CoreIsolate;
+// use deno_core::CoreIsolate;
+// use deno_core::CoreIsolateState;
 use deno_core::ZeroCopyBuf;
 use deno_core::ModuleSpecifier;
-use crate::permissions::Permissions;
+// use crate::permissions::Permissions;
 
-pub fn init(i: &mut CoreIsolate, s: &State) {
+pub fn init(i: &mut deno_core::CoreIsolate, s: &State) {
+// pub fn init(i: &mut deno_core::EsIsolate, s: &State) {
+  
   // i.remove_module();
+  // deno_core::EsIsolate::state(&i);
+  // remove_module
+
   i.register_op(
     "op_clear_cache_import",
     s.stateful_json_op(op_clear_cache_import),
+    // s.stateful_json_op2(op_clear_cache_import),
   );
 }
 
@@ -22,10 +29,14 @@ struct ClearCacheImportArgs {
 }
 
 fn op_clear_cache_import(
+  // isolate_state: &mut deno_core::CoreIsolateState,
+  // isolate_state: &mut deno_core::EsIsolateState,
   state: &State,
   args: Value,
   _zero_copy: &mut [ZeroCopyBuf],
 ) -> Result<JsonOp, OpError> {
+  // isolate_state.remove_module();
+  // isolate_state.op_registry.modules.unregister("abc");
   let state = state.borrow_mut();
   let referrer = state.main_module.to_string();
 
