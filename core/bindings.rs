@@ -252,6 +252,7 @@ pub extern "C" fn host_import_module_dynamically_callback(
   let mut hs = v8::EscapableHandleScope::new(cbs.enter());
   let scope = hs.enter();
 
+  // NOTE(bartlomieju): will crash for non-UTF-8 specifier
   let specifier_str = specifier
     .to_string(scope)
     .unwrap()
@@ -262,6 +263,9 @@ pub extern "C" fn host_import_module_dynamically_callback(
     .unwrap()
     .to_rust_string_lossy(scope);
 
+  // TODO(ry) I'm not sure what HostDefinedOptions is for or if we're ever going
+  // to use it. For now we check that it is not used. This check may need to be
+  // changed in the future.
   let host_defined_options = referrer.get_host_defined_options();
   assert_eq!(host_defined_options.length(), 0);
 
