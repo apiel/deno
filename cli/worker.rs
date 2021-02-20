@@ -103,6 +103,13 @@ impl Worker {
     let loader = Rc::new(state.clone());
     let mut isolate = deno_core::EsIsolate::new(loader, startup_data, false);
 
+    // let state_rc = deno_core::EsIsolate::state(&isolate);
+    // // let my_state = state_rc.borrow();
+    // let mut my_state = state_rc.borrow_mut();
+    // my_state.modules;
+    // isolate.get_modules();
+    // isolate.remove_module();
+
     {
       let global_state = state.borrow().global_state.clone();
       let core_state_rc = CoreIsolate::state(&isolate);
@@ -275,6 +282,7 @@ impl MainWorker {
       ops::timers::init(isolate, &state);
       ops::tty::init(isolate, &state);
       ops::worker_host::init(isolate, &state);
+      ops::module::init(isolate, &state);
     }
     Self(worker)
   }

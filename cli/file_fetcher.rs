@@ -57,6 +57,11 @@ impl SourceFileCache {
       None => None,
     }
   }
+
+  pub fn remove(&self, key: String) {
+    let mut c = self.0.lock().unwrap();
+    c.remove(&key);
+  }
 }
 
 const SUPPORTED_URL_SCHEMES: [&str; 3] = ["http", "https", "file"];
@@ -105,6 +110,13 @@ impl SourceFileFetcher {
     }
 
     Ok(())
+  }
+
+  pub fn remove_cached_source_file(
+    &self,
+    specifier: &ModuleSpecifier,
+  ) {
+    self.source_file_cache.remove(specifier.to_string());
   }
 
   /// Required for TS compiler and source maps.

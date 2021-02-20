@@ -50,6 +50,7 @@ export {
   makeTempFile,
   MakeTempOptions,
 } from "./ops/fs/make_temp.ts";
+export { clearCacheImport } from "./ops/module.ts";
 export { metrics, Metrics } from "./ops/runtime.ts";
 export { mkdirSync, mkdir, MkdirOptions } from "./ops/fs/mkdir.ts";
 export { connect, listen, Listener, Conn } from "./net.ts";
